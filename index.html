@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulk Video Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="box">
+    <h2>Bulk Video Downloader</h2>
+
+    <textarea id="links" placeholder="Paste Instagram / Facebook / YouTube links...&#10;One per line"></textarea>
+
+    <button onclick="download()">Download ZIP</button>
+
+    <p id="status"></p>
+</div>
+
+<script>
+async function download() {
+    let links = document.getElementById("links").value;
+
+    if (!links.trim()) {
+        alert("Please paste at least one link!");
+        return;
+    }
+
+    document.getElementById("status").innerText = "Downloading... Please wait";
+
+    let formData = new FormData();
+    formData.append("links", links);
+
+    let response = await fetch("/download", {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        document.getElementById("status").innerText = "Server error!";
+        return;
+    }
+
+    let blob = await response.blob();
+    let url = window.URL.createObjectURL(blob);
+
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = "videos.zip";
+    a.click();
+
+    document.getElementById("status").innerText = "Download Complete!";
+}
+</script>
+
+</body>
+</html>
