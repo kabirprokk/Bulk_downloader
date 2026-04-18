@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Form
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 import yt_dlp
 import os
 import uuid
@@ -8,9 +8,10 @@ import zipfile
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def home():
-    return FileResponse("index.html")
+    with open("index.html", "r", encoding="utf-8") as f:
+        return f.read()
 
 
 @app.post("/download")
@@ -24,7 +25,8 @@ async def download_videos(links: str = Form(...)):
 
     ydl_opts = {
         "outtmpl": f"{folder}/%(title)s.%(ext)s",
-        "format": "mp4",
+        "format": "bestvideo+bestaudio/best",
+        "merge_output_format": "mp4",
         "quiet": True,
         "noplaylist": True,
         "ignoreerrors": True
