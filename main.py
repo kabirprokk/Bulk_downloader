@@ -9,12 +9,12 @@ import zipfile
 app = FastAPI()
 
 # Serve static web files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 
 @app.get("/")
 async def home():
-    return FileResponse("static/index.html")
+    return FileResponse("index.html")
 
 
 @app.post("/download")
