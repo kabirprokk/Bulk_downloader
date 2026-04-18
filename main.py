@@ -27,6 +27,7 @@ async def download_videos(links: str = Form(...)):
         "outtmpl": f"{folder}/%(title)s.%(ext)s",
         "format": "bestvideo+bestaudio/best",
         "merge_output_format": "mp4",
+        "merge_output_format": "mp4",
         "quiet": True,
         "noplaylist": True,
         "ignoreerrors": True
